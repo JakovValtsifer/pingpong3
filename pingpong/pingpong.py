@@ -39,6 +39,7 @@ def check_collision(enemyRect, score):
 
 while not gameover:
     clock.tick(60)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameover = True
@@ -80,8 +81,11 @@ while not gameover:
         enemyImage = pygame.transform.scale(enemyImage, [60, 73])
         for enemyRect in enemyRects[:]:
             if player.colliderect(enemyRect):
-                enemyRects.remove(enemyRect)
-                score += 1
+                if enemyImageName == "bee.png":
+                    score -= 1
+                elif enemyImageName == "ch.png":
+                    score += 1
+        enemies[enemyImageName].remove(enemyRect)
             enemyRect.top += 1  # сдвигаем врагов на 1 пиксель вниз
             screen.blit(enemyImage, enemyRect)
         ruut = pygame.draw.rect(screen, red, [posX, posY, 30, 30])
