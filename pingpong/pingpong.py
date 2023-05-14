@@ -1,15 +1,17 @@
-﻿import pygame, random
+import pygame
+import random
 
 pygame.init()
 
-red = [100,240,255]
-lBlue = [100,240,255]
+red = [100, 240, 255]
+lBlue = [100, 240, 255]
 
 screenX = 640
 screenY = 480
 screen = pygame.display.set_mode([screenX, screenY])
 pygame.display.set_caption("Surface")
 screen.fill(lBlue)
+
 
 clock = pygame.time.Clock()
 
@@ -26,7 +28,16 @@ enemyCounter = 0
 totalEnemies = 100
 score = 0
 
+
+font = pygame.font.SysFont(None, 36) # Создаем объект шрифта
+score_text = font.render("Score: " + str(score), True, (255, 255, 255))
+screen.blit(score_text, (10, 10))
+
+
+
 enemies = {}
+
+
 def check_collision(enemyRect, score):
     global enemies
     if player.colliderect(enemyRect):
@@ -36,6 +47,8 @@ def check_collision(enemyRect, score):
             score += 1
         enemies[enemyImageName].remove(enemyRect)
     return score
+
+
 
 while not gameover:
     clock.tick(60)
@@ -80,21 +93,20 @@ while not gameover:
         enemyImage = pygame.image.load(enemyImageName)
         enemyImage = pygame.transform.scale(enemyImage, [60, 73])
         for enemyRect in enemyRects[:]:
-            if player.colliderect(enemyRect):
-                if enemyImageName == "bee.png":
-                    score -= 1
-                elif enemyImageName == "ch.png":
-                    score += 1
-        enemies[enemyImageName].remove(enemyRect)
+            score = check_collision(enemyRect, score)
             enemyRect.top += 1  # сдвигаем врагов на 1 пиксель вниз
             screen.blit(enemyImage, enemyRect)
         ruut = pygame.draw.rect(screen, red, [posX, posY, 30, 30])
 
+    score_font = pygame.font.SysFont('Comic Sans MS', 30)
+    score_text = score_font.render("Пойманный сыр: " + str(score), True, (0, 0, 0))
+    screen.blit(score_text, (10, 10))
+
     pygame.display.flip()
     screen.fill(lBlue)
 
-    print(score)
     if score == 20:
       gameover = True
 
 pygame.quit()
+
